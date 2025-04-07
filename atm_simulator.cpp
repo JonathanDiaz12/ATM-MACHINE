@@ -1,73 +1,78 @@
-#include <iomanip>
 #include <iostream>
-#include <string>
 using namespace std;
-double Balance = 0;
-double Deposits =0;
-double Withdrawal = 0;
-int Choice = 0;
-int balance = 500;
-char Quit_Key = '4';
-double Deposit_Info;
 
-double checkBalance(double balance)
-     {
-        
-        return balance;
-     }
-
-double Deposit (double Deposit_Info)
-     {
-        if (Deposit_Info<=0){
-            cout<<"You are trying to add negative money. Prhaps you were trying to make a withdrawl?"<<endl;
-            cout<<"Please try again at the menu"<<endl;
-        }
-     }
-
+// Function prototypes
+void displayMenu();
+void checkBalance(const double &balance);
+void depositMoney(double &balance);
+void withdrawMoney(double &balance);
 
 int main() {
-   cout<<"======BANKING SYSTEM======"<<endl;
-cout<<"1. Deposit money"<<endl;
-cout<<"2. Withdraw money"<<endl;
-cout<<"3. Check balance"<<endl;
-cout<<"4. Quit"<<endl;
-cout<<"=========================="<<endl;
-cout<<"Choose an option: ";
-cin>>Choice;
-while (Choice !=4){
+    double balance = 0.0;
+    int choice;
 
-switch (Choice) {
+    do {
+        displayMenu();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
             case 1:
-                cout << "Enter the amount you would like to deposit: ";
-                cin >> Deposits;
-                if (Deposits < 0) {
-                    cout << "Invalid amount. Deposit must be positive." << endl;
-                } else {
-                    Balance += Deposits;
-                    cout << "Deposit successful! New balance is $" << fixed << setprecision(2) << Balance << endl;
-                }
+                checkBalance(balance);
                 break;
             case 2:
-                cout << "Enter the amount you would like to withdraw: ";
-                cin >> Withdrawal;
-                if (Withdrawal < 0 && Withdrawal >Balance) {
-                    cout << "Insufficient funds! Withdrawal unsuccessful." << endl;
-                } else {
-                    Balance -= Withdrawal;
-                    cout << "Withdrawal successful! New balance is $" << fixed << setprecision(2) << Balance << endl;
-                }
+                depositMoney(balance);
                 break;
             case 3:
-                cout << "Your current balance is: $" << fixed << setprecision(2) << Balance << endl;
+                withdrawMoney(balance);
+                break;
+            case 4:
+                cout << "Exiting the ATM simulator. Goodbye!" << endl;
                 break;
             default:
-                cout << "Invalid choice. Please choose again." << endl;
-                break;
-}    
-        cout << "Is there anything else I can help you with? If not, enter '4' to quit: ";
-        cin >> Choice;
-        cout << "" << endl;
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
 }
-cout<<"Thank you for using our services!"<<endl;
-return 0;
+
+void displayMenu() {
+    cout << "\nATM Simulator Menu:" << endl;
+    cout << "1. Check Balance" << endl;
+    cout << "2. Deposit Money" << endl;
+    cout << "3. Withdraw Money" << endl;
+    cout << "4. Exit" << endl;
+}
+
+void checkBalance(const double &balance) {
+    cout << "Your current balance is: $" << balance << endl;
+}
+
+void depositMoney(double &balance) {
+    double amount;
+    cout << "Enter the amount to deposit: $";
+    cin >> amount;
+
+    if (amount > 0) {
+        balance += amount;
+        cout << "Deposit successful. Your new balance is: $" << balance << endl;
+    } else {
+        cout << "Invalid amount. Deposit must be greater than $0." << endl;
+    }
+}
+
+void withdrawMoney(double &balance) {
+    double amount;
+    cout << "Enter the amount to withdraw: $";
+    cin >> amount;
+
+    if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        cout << "Withdrawal successful. Your new balance is: $" << balance << endl;
+    } else if (amount > balance) {
+        cout << "Insufficient funds. Your current balance is: $" << balance << endl;
+    } else {
+        cout << "Invalid amount. Withdrawal must be greater than $0." << endl;
+    }
 }
